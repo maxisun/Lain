@@ -14,7 +14,7 @@
     <string name="phone">Phone</string>
     <string name="maxisun_gmail_com">maxisun@gmail.com</string>
     <string name="_7777_7777">7777-7777</string>
-    <string name="birthday">Birthday</string>
+    <string name="birthday">DD/MM/YYYY</string>
     <string name="add">Add</string>
     <string name="email">Email</string>
     <string name="lastname">LastName</string>

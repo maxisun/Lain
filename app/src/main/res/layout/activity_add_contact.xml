@@ -149,8 +149,8 @@
         android:hint="@string/_7777_7777"
         android:inputType="phone" />
 
-    <Button
-        android:id="@+id/textView14"
+    <TextView
+        android:id="@+id/botonBirthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -160,12 +160,12 @@
         android:text="@string/birthday" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/botonAddContacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/botonaddimagen"
         android:layout_alignLeft="@+id/botonaddimagen"
-        android:layout_alignTop="@+id/textView14"
+        android:layout_alignTop="@+id/botonBirthday"
         android:text="@string/add" />
 
 

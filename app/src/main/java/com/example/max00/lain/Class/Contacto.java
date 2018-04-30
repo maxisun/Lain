@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class Contacto implements Serializable {
 
     private String nombre;
-    private int Imagen;
+    //private int Imagen;
 
 
-    public Contacto(String nombre, int imagen) {
+    public Contacto(String nombre/*, int imagen*/) {
         this.nombre = nombre;
-        Imagen = imagen;
+        //Imagen = imagen;
     }
 
     public String getNombre() {
@@ -21,11 +21,11 @@ public class Contacto implements Serializable {
         this.nombre = nombre;
     }
 
-    public int getImagen() {
-        return Imagen;
+   /* public int getImagen() {
+        //return Imagen;
     }
-
+*/
     public void setImagen(int imagen) {
-        Imagen = imagen;
+        //Imagen = imagen;
     }
 }

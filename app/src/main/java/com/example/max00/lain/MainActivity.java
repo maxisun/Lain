@@ -3,6 +3,7 @@ package com.example.max00.lain;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -25,10 +26,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.max00.lain.Activities.AddContactActivity;
 import com.example.max00.lain.Adapters.RecyclerViewAdapter;
 import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.Fragments.ContactsFragment;
 import com.example.max00.lain.Fragments.FavouritesFragment;
+import com.example.max00.lain.Activities.AddContactActivity;
 
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -77,12 +81,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, AddContactActivity.class);
+                startActivity(intent);
             }
         });
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("ListaContactos",contactos);
+        //Bundle bundle = new Bundle();
+        //bundle.putSerializable("ListaContactos",contactos);
 
     }
 //app:srcCompat="@android:drawable/ic_dialog_email"

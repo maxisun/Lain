@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.AddContactActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/textview"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/add_img"
+        android:layout_width="127dp"
+        android:layout_height="114dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="79dp"
+        app:srcCompat="@drawable/holi" />
+
+    <Button
+        android:id="@+id/botonaddimagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="63dp"
+        android:layout_marginRight="63dp"
+        android:layout_marginTop="108dp"
+        android:text="@string/add_image" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText9"
+        android:layout_alignStart="@+id/textView8"
+        android:layout_alignLeft="@+id/textView8"
+        android:text="@string/name"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/editText9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="221dp"
+        android:ems="10"
+        android:hint="@string/maxisun"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="246dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:text="@string/lastname"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/editText10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText9"
+        android:layout_alignStart="@+id/editText9"
+        android:layout_alignTop="@+id/textView11"
+        android:ems="10"
+        android:hint="@string/espinal"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView8"
+        android:layout_alignLeft="@+id/textView8"
+        android:layout_alignTop="@+id/editText13"
+        android:text="@string/email"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textView8"
+        android:layout_alignLeft="@+id/textView8"
+        android:layout_marginBottom="116dp"
+        android:text="@string/phone"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/editText13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/editText9"
+        android:layout_alignLeft="@+id/editText9"
+        android:layout_marginBottom="166dp"
+        android:ems="10"
+        android:hint="@string/maxisun_gmail_com"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editText14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editText9"
+        android:layout_alignLeft="@+id/editText9"
+        android:layout_alignTop="@+id/textView13"
+        android:ems="10"
+        android:hint="@string/_7777_7777"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textView8"
+        android:layout_alignLeft="@+id/textView8"
+        android:layout_marginBottom="50dp"
+        android:text="@string/birthday" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/botonaddimagen"
+        android:layout_alignLeft="@+id/botonaddimagen"
+        android:layout_alignTop="@+id/textView14"
+        android:text="@string/add" />
+
+
+</RelativeLayout>

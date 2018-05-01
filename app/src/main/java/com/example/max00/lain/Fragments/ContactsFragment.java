@@ -76,28 +76,29 @@ public class ContactsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v  = inflater.inflate(R.layout.fragment_contacts, container, false);
         RecyclerView recyclerView = v.findViewById(R.id.recyclerView_contacts);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
+        recyclerView.setAdapter(new RecyclerViewAdapter(mParam1));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+
+        /*GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         RecyclerView.LayoutManager layoutManager= gridLayoutManager;
         recyclerView.setLayoutManager(layoutManager);
-
         RecyclerViewAdapter adapter = new RecyclerViewAdapter((ArrayList<Contacto>) getContactos());
-
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);*/
         return v;
     }
 
-    private List<Contacto> getContactos(){
+    /*private List<Contacto> getContactos(){
 
         List<Contacto> list = new ArrayList<>();
         Cursor cursor= getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,null
                 ,null,ContactsContract.Contacts.DISPLAY_NAME+" ASC");
         cursor.moveToFirst();
         while(cursor.moveToNext()){
-            list.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))));
+            list.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)),R.drawable.holi));
         }
 
         return list;
-    }
+    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

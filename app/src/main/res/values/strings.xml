@@ -9,7 +9,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_add_contact">AddContactActivity</string>
+    <string name="title_activity_add_contact">AddContact</string>
     <string name="espinal">Espinal</string>
     <string name="phone">Phone</string>
     <string name="maxisun_gmail_com">maxisun@gmail.com</string>

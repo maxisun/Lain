@@ -9,10 +9,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -23,19 +20,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.max00.lain.Activities.AddContactActivity;
-import com.example.max00.lain.Adapters.RecyclerViewAdapter;
 import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.Fragments.ContactsFragment;
 import com.example.max00.lain.Fragments.FavouritesFragment;
-import com.example.max00.lain.Activities.AddContactActivity;
+import com.example.max00.lain.Adapters.ViewPagerAdapter;
 
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPagerAdapter viewPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -62,19 +57,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter.setContactos(getContactos());
         //getContactos();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -85,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //Bundle bundle = new Bundle();
-        //bundle.putSerializable("ListaContactos",contactos);
 
     }
 //app:srcCompat="@android:drawable/ic_dialog_email"
@@ -107,11 +103,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private ArrayList<Contacto> getContactos(){
 
-   /* public void getContactos(){
+        ArrayList<Contacto> list = new ArrayList<>();
+        Cursor cursor= getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,null
+                ,null,ContactsContract.Contacts.DISPLAY_NAME+" ASC");
+        cursor.moveToFirst();
+        while(cursor.moveToNext()){
+            list.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)),R.drawable.holi));
+        }
+
+        return list;
+    }
+
+    /*public void getContactos(){
 
         contactos = new ArrayList<>();
-        Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null,null,null, ContactsContract.Contacts.DISPLAY_NAME+"ASC");
+        ContentResolver contentResolver;
+        Cursor cursor;
+        cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null,null,null, ContactsContract.Contacts.DISPLAY_NAME+"ASC");
         cursor.moveToFirst();
         while (cursor.moveToNext()){
             contactos.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)),R.drawable.judge));
@@ -137,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        //public ArrayList<Contacto> contactoArrayList;
+        public ArrayList<Contacto> contactoArrayList;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -150,12 +160,12 @@ public class MainActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static Fragment newInstance(int sectionNumber) {
+        public static Fragment newInstance(int sectionNumber,ArrayList<Contacto> contactos) {
             Fragment fragment=null;
             //Bundle bundle = new Bundle();
             //ArrayList<Contacto> contactoArrayList = (ArrayList<Contacto>) bundle.getSerializable("Hola");
             switch (sectionNumber){
-                case 1: fragment= new ContactsFragment();
+                case 1: fragment= ContactsFragment.newInstance(contactos);
                     break;
                 case 2: fragment= new FavouritesFragment();
                     break;
@@ -185,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        public ArrayList<Contacto> contactos;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -193,7 +205,8 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            //contactos = getContactos();
+            return PlaceholderFragment.newInstance(position + 1,getContactos());
         }
 
         @Override
@@ -212,6 +225,15 @@ public class MainActivity extends AppCompatActivity {
                     return "Favourites";
             }
             return null;
+        }
+
+
+        public ArrayList<Contacto> getContactos() {
+            return contactos;
+        }
+
+        public void setContactos(ArrayList<Contacto> contactos) {
+            this.contactos = contactos;
         }
     }
 }

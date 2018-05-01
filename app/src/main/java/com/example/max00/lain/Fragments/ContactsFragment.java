@@ -37,6 +37,8 @@ public class ContactsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private ArrayList<Contacto> mParam1;
     private String mParam2;
+    private RecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,9 +77,17 @@ public class ContactsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v  = inflater.inflate(R.layout.fragment_contacts, container, false);
-        RecyclerView recyclerView = v.findViewById(R.id.recyclerView_contacts);
+        recyclerView = v.findViewById(R.id.recyclerView_contacts);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
+        RecyclerView.LayoutManager layoutManager = gridLayoutManager;
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        adapter = new RecyclerViewAdapter(getContext(),mParam1);
+        recyclerView.setAdapter(adapter);
+
+        /*RecyclerView recyclerView = v.findViewById(R.id.recyclerView_contacts);
         recyclerView.setAdapter(new RecyclerViewAdapter(mParam1));
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));*/
 
         /*GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         RecyclerView.LayoutManager layoutManager= gridLayoutManager;
@@ -85,6 +95,10 @@ public class ContactsFragment extends Fragment {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter((ArrayList<Contacto>) getContactos());
         recyclerView.setAdapter(adapter);*/
         return v;
+    }
+
+    public void nofify(){
+        adapter.notifyDataSetChanged();
     }
 
     /*private List<Contacto> getContactos(){
@@ -129,4 +143,11 @@ public class ContactsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    public ArrayList<Contacto> getmParam1() {
+        return mParam1;
+    }
+
+    public void setmParam1(ArrayList<Contacto> mParam1) {
+        this.mParam1 = mParam1;
+    }
 }

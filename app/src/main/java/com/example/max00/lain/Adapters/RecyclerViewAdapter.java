@@ -1,5 +1,6 @@
 package com.example.max00.lain.Adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ContactsViewHolder> {
 
     private ArrayList<Contacto> contactos;
+    private Context context;
+    private LayoutInflater layoutInflater;
 
     public static class ContactsViewHolder extends RecyclerView.ViewHolder{
 
@@ -32,15 +35,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public RecyclerViewAdapter(ArrayList<Contacto> lolis) {
+    public RecyclerViewAdapter(Context context,ArrayList<Contacto> lolis) {
         this.contactos = lolis;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view,parent,false);
-        return (new ContactsViewHolder(v));
+
+        layoutInflater = LayoutInflater.from(context);
+        View v = layoutInflater.inflate(R.layout.card_view,parent,false);
+        ContactsViewHolder contactsViewHolder = new ContactsViewHolder(v);
+        return contactsViewHolder;
+
+        /*View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view,parent,false);
+        return (new ContactsViewHolder(v));*/
     }
 
     @Override
@@ -50,6 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.name.setText(contacto.getNombre());
         //holder.img.setImageResource(contacto.getImagen());
+
     }
 
     @Override

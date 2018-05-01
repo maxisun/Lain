@@ -1,5 +1,6 @@
 package com.example.max00.lain.Activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,9 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.R;
 
 import java.util.Calendar;
@@ -24,11 +27,24 @@ import java.util.Calendar;
 public class AddContactActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 100;
+    private Button addContact;
     private Button buttonImagen;
-    private TextView textViewBirthday;
     private DatePickerDialog.OnDateSetListener mdateSetListener;
     private Uri uri;
+
+    private String name;
+    private String Lastname;
+    private String Email;
+    private String phone;
+    private String birthday;
+    private int image;
+
     private ImageView imageView;
+    private EditText NameR;
+    private EditText LastNameR;
+    private EditText emailR;
+    private EditText PhoneR;
+    private TextView textViewBirthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +53,13 @@ public class AddContactActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         imageView = findViewById(R.id.add_img);
+        NameR = findViewById(R.id.editText9);
+        LastNameR = findViewById(R.id.editText10);
+        emailR = findViewById(R.id.editText13);
+        PhoneR = findViewById(R.id.editText14);
         textViewBirthday = findViewById(R.id.botonBirthday);
         buttonImagen = findViewById(R.id.botonaddimagen);
+        addContact = findViewById(R.id.botonAddContacto);
         buttonImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +93,18 @@ public class AddContactActivity extends AppCompatActivity {
                 textViewBirthday.setText(date);
             }
         };
+
+        addContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Contacto contacto = new Contacto(NameR.getText().toString(),LastNameR.getText().toString(),emailR.getText().toString(),PhoneR.getText().toString(),textViewBirthday.getText().toString(),R.drawable.judge);
+                Intent intent = new Intent();
+                intent.putExtra("New_Contact",contacto);
+                setResult(Activity.RESULT_OK,intent);
+                finish();
+            }
+        });
+
 
     }
 

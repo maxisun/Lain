@@ -1,5 +1,6 @@
 package com.example.max00.lain;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.max00.lain.Activities.AddContactActivity;
+import com.example.max00.lain.Adapters.RecyclerViewAdapter;
 import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.Fragments.ContactsFragment;
 import com.example.max00.lain.Fragments.FavouritesFragment;
@@ -46,12 +48,31 @@ public class MainActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPagerAdapter viewPagerAdapter;
+    private ContactsFragment contactsFragment;
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
     public ArrayList<Contacto> contactos;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK && requestCode ==2){
+            if(data.hasExtra("New_Contact")){
+                Contacto newcontact = (Contacto) data.getSerializableExtra("New_Contact");
+                newcontact.getNombre();
+                newcontact.getImagen();
+                contactos.add(new Contacto(newcontact.getNombre(),newcontact.getImagen()));
+                //ContactsFragment.newInstance(contactos);
+                mSectionsPagerAdapter.setContactos(contactos);
+                contactsFragment.nofify();
+            }
+        }
+
+        //super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.setContactos(getContactos());
+        contactos = getContactos();
+        mSectionsPagerAdapter.setContactos(contactos);
         //getContactos();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -80,9 +102,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddContactActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,2);
             }
         });
+
+
+
 
     }
 //app:srcCompat="@android:drawable/ic_dialog_email"
@@ -116,32 +141,6 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 
-    /*public void getContactos(){
-
-        contactos = new ArrayList<>();
-        ContentResolver contentResolver;
-        Cursor cursor;
-        cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null,null,null, ContactsContract.Contacts.DISPLAY_NAME+"ASC");
-        cursor.moveToFirst();
-        while (cursor.moveToNext()){
-            contactos.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)),R.drawable.judge));
-        }
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
     /**
      * A placeholder fragment containing a simple view.

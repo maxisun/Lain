@@ -1,10 +1,13 @@
 package com.example.max00.lain.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +23,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.Result;
+
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -31,15 +38,16 @@ import java.util.List;
 public class ContactsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "ListaContactos";
+    private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private ArrayList<Contacto> mParam1;
+    private String mParam1;
     private String mParam2;
     private RecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
-
+    private View v;
+    List<Contacto> list = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
 
     public ContactsFragment() {
@@ -54,11 +62,11 @@ public class ContactsFragment extends Fragment {
      * @return A new instance of fragment ContactsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ContactsFragment newInstance(ArrayList<Contacto> param1) {
+    public static ContactsFragment newInstance(String param1,String param2) {
         ContactsFragment fragment = new ContactsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,22 +75,35 @@ public class ContactsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 =(ArrayList<Contacto>) getArguments().getSerializable(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK && requestCode == 3){
+            if(data.hasExtra("New_Contact")==true){
+                Contacto getcontacto =data.getParcelableExtra("New_Contact");
+                Contacto new_contact = new Contacto(getcontacto.getNombre(),getcontacto.getApellido(),getcontacto.getEmail(),getcontacto.getPhone(),getcontacto.getDate(),R.drawable.judge);
+                list.add(new_contact);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.ECLAIR_0_1)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v  = inflater.inflate(R.layout.fragment_contacts, container, false);
+        v = inflater.inflate(R.layout.fragment_contacts, container, false);
         recyclerView = v.findViewById(R.id.recyclerView_contacts);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         RecyclerView.LayoutManager layoutManager = gridLayoutManager;
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        adapter = new RecyclerViewAdapter(getContext(),mParam1);
+        adapter = new RecyclerViewAdapter(getContext(), (ArrayList<Contacto>) getContactos());
         recyclerView.setAdapter(adapter);
 
         /*RecyclerView recyclerView = v.findViewById(R.id.recyclerView_contacts);
@@ -97,22 +118,16 @@ public class ContactsFragment extends Fragment {
         return v;
     }
 
-    public void nofify(){
-        adapter.notifyDataSetChanged();
-    }
-
-    /*private List<Contacto> getContactos(){
-
-        List<Contacto> list = new ArrayList<>();
-        Cursor cursor= getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,null
-                ,null,ContactsContract.Contacts.DISPLAY_NAME+" ASC");
+    @RequiresApi(api = Build.VERSION_CODES.ECLAIR_0_1)
+    private List<Contacto> getContactos(){
+        Cursor cursor = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
         cursor.moveToFirst();
         while(cursor.moveToNext()){
             list.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)),R.drawable.holi));
         }
-
+        cursor.close();
         return list;
-    }*/
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -120,7 +135,6 @@ public class ContactsFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
 
     @Override
     public void onDetach() {
@@ -141,13 +155,5 @@ public class ContactsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public ArrayList<Contacto> getmParam1() {
-        return mParam1;
-    }
-
-    public void setmParam1(ArrayList<Contacto> mParam1) {
-        this.mParam1 = mParam1;
     }
 }

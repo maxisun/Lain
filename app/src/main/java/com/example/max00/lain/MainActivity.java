@@ -1,15 +1,22 @@
 package com.example.max00.lain;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.annotation.RequiresPermission;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -32,20 +39,15 @@ import com.example.max00.lain.Fragments.FavouritesFragment;
 import com.example.max00.lain.Adapters.ViewPagerAdapter;
 
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+    static final int REQUEST_CODE_ASK_PERMISSION = 2018;
+    int access;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPagerAdapter viewPagerAdapter;
     private ContactsFragment contactsFragment;
@@ -57,28 +59,34 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     public ArrayList<Contacto> contactos;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK && requestCode ==2){
-            if(data.hasExtra("New_Contact")){
-                Contacto newcontact = (Contacto) data.getSerializableExtra("New_Contact");
-                newcontact.getNombre();
-                newcontact.getImagen();
-                contactos.add(new Contacto(newcontact.getNombre(),newcontact.getImagen()));
-                //ContactsFragment.newInstance(contactos);
-                mSectionsPagerAdapter.setContactos(contactos);
-                contactsFragment.nofify();
-            }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void grantpermission(){
+        access = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+        if(access != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},REQUEST_CODE_ASK_PERMISSION);
         }
-
-        //super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_CODE_ASK_PERMISSION:
+                if (grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(getApplicationContext(),"ACCESS GRANTED",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"ACCESS DENIED",Toast.LENGTH_SHORT).show();
+                }break;
+            default:
+                super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        grantpermission();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -86,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        contactos = getContactos();
-        mSectionsPagerAdapter.setContactos(contactos);
+        //contactos = getContactos();
+        //mSectionsPagerAdapter.setContactos(contactos);
         //getContactos();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -102,15 +110,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddContactActivity.class);
-                startActivityForResult(intent,2);
+                startActivityForResult(intent,3);
             }
         });
-
-
-
-
     }
 //app:srcCompat="@android:drawable/ic_dialog_email"
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private ArrayList<Contacto> getContactos(){
+    /*private ArrayList<Contacto> getContactos(){
 
         ArrayList<Contacto> list = new ArrayList<>();
         Cursor cursor= getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,null
@@ -139,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return list;
-    }
+    }*/
 
 
     /**
@@ -159,12 +173,12 @@ public class MainActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static Fragment newInstance(int sectionNumber,ArrayList<Contacto> contactos) {
+        public static Fragment newInstance(int sectionNumber) {
             Fragment fragment=null;
             //Bundle bundle = new Bundle();
             //ArrayList<Contacto> contactoArrayList = (ArrayList<Contacto>) bundle.getSerializable("Hola");
             switch (sectionNumber){
-                case 1: fragment= ContactsFragment.newInstance(contactos);
+                case 1: fragment= new ContactsFragment();
                     break;
                 case 2: fragment= new FavouritesFragment();
                     break;
@@ -194,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public ArrayList<Contacto> contactos;
+        //public ArrayList<Contacto> contactos;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -205,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             //contactos = getContactos();
-            return PlaceholderFragment.newInstance(position + 1,getContactos());
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
@@ -227,12 +241,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        public ArrayList<Contacto> getContactos() {
+        /*public ArrayList<Contacto> getContactos() {
             return contactos;
         }
 
         public void setContactos(ArrayList<Contacto> contactos) {
             this.contactos = contactos;
-        }
+        }*/
     }
 }

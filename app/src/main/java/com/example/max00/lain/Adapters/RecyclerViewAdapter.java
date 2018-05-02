@@ -14,14 +14,15 @@ import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ContactsViewHolder> {
 
-    private ArrayList<Contacto> contactos;
+    private List<Contacto> contactos;
     private Context context;
     private LayoutInflater layoutInflater;
 
-    public static class ContactsViewHolder extends RecyclerView.ViewHolder{
+    public class ContactsViewHolder extends RecyclerView.ViewHolder{
 
         CardView cardView;
         TextView name;
@@ -35,7 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public RecyclerViewAdapter(Context context,ArrayList<Contacto> lolis) {
+    public RecyclerViewAdapter(Context context,List<Contacto> lolis) {
         this.contactos = lolis;
         this.context = context;
     }

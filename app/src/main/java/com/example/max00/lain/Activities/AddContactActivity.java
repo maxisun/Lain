@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.Fragments.ContactsFragment;
@@ -98,11 +99,16 @@ public class AddContactActivity extends AppCompatActivity {
         addContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Contacto contacto = new Contacto(NameR.getText().toString(),LastNameR.getText().toString(),emailR.getText().toString(),PhoneR.getText().toString(),textViewBirthday.getText().toString(),uri,false);
-                Intent intent = new Intent(getApplicationContext(), ContactsFragment.class);
-                intent.putExtra("New_Contact",contacto);
-                setResult(Activity.RESULT_OK,intent);
-                finish();
+
+                if(!NameR.getText().toString().isEmpty() && !LastNameR.getText().toString().isEmpty() && !emailR.getText().toString().isEmpty() && !PhoneR.getText().toString().isEmpty() && textViewBirthday.getText().toString()!= "DD/MM/YYYY" && uri !=null){
+                    Contacto contacto = new Contacto(NameR.getText().toString(), LastNameR.getText().toString(), emailR.getText().toString(), PhoneR.getText().toString(), textViewBirthday.getText().toString(), uri, false);
+                    Intent intent = new Intent(getApplicationContext(), ContactsFragment.class);
+                    intent.putExtra("New_Contact", contacto);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }else {
+                    Toast.makeText(getApplicationContext(),"Termine de ingresar datos e imagen. Para ingresar fecha toque el fecha por defecto",Toast.LENGTH_LONG).show();
+                }
             }
         });
 

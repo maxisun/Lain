@@ -107,7 +107,7 @@ public class AddContactActivity extends AppCompatActivity {
                     setResult(Activity.RESULT_OK, intent);
                     finish();
                 }else {
-                    Toast.makeText(getApplicationContext(),"Termine de ingresar datos e imagen. Para ingresar fecha toque el fecha por defecto",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Termine de ingresar datos e imagen. Para ingresar fecha toque la fecha por defecto",Toast.LENGTH_LONG).show();
                 }
             }
         });

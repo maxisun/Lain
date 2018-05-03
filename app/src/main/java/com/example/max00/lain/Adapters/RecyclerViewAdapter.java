@@ -60,8 +60,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         final Contacto contacto = contactos.get(position);
 
         holder.name.setText(contacto.getNombre());
-        //holder.img.setImageResource(contacto.getImagen());
-
+        holder.img.setImageResource(contacto.getImagen());
+        holder.img.setImageURI(contacto.getUri());
     }
 
     @Override

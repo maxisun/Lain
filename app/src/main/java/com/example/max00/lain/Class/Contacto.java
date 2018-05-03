@@ -36,13 +36,12 @@ public class Contacto implements Parcelable {
         Imagen = imagen;
     }
 
-    public Contacto(String nombre, String apellido, String email, String phone, String date, int imagen, Uri uri, Boolean check) {
+    public Contacto(String nombre, String apellido, String email, String phone, String date, Uri uri, Boolean check) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.phone = phone;
         this.date = date;
-        Imagen = imagen;
         this.uri = uri;
         this.check = check;
     }

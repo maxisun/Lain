@@ -86,7 +86,7 @@ public class ContactsFragment extends Fragment {
         if(resultCode == RESULT_OK && requestCode == 3){
             if(data.hasExtra("New_Contact")==true){
                 Contacto getcontacto =data.getParcelableExtra("New_Contact");
-                Contacto new_contact = new Contacto(getcontacto.getNombre(),getcontacto.getApellido(),getcontacto.getEmail(),getcontacto.getPhone(),getcontacto.getDate(),R.drawable.judge);
+                Contacto new_contact = new Contacto(getcontacto.getNombre(),getcontacto.getApellido(),getcontacto.getEmail(),getcontacto.getPhone(),getcontacto.getDate(),getcontacto.getUri(),getcontacto.getCheck());
                 list.add(new_contact);
             }
         }

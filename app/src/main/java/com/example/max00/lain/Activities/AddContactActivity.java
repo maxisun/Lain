@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.max00.lain.Class.Contacto;
+import com.example.max00.lain.Fragments.ContactsFragment;
 import com.example.max00.lain.R;
 
 import java.util.Calendar;
@@ -52,7 +53,7 @@ public class AddContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_contact);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        imageView = findViewById(R.id.add_img);
+        imageView = (ImageView) findViewById(R.id.add_img);
         NameR = findViewById(R.id.editText9);
         LastNameR = findViewById(R.id.editText10);
         emailR = findViewById(R.id.editText13);
@@ -97,8 +98,8 @@ public class AddContactActivity extends AppCompatActivity {
         addContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Contacto contacto = new Contacto(NameR.getText().toString(),LastNameR.getText().toString(),emailR.getText().toString(),PhoneR.getText().toString(),textViewBirthday.getText().toString(),R.drawable.judge);
-                Intent intent = new Intent();
+                Contacto contacto = new Contacto(NameR.getText().toString(),LastNameR.getText().toString(),emailR.getText().toString(),PhoneR.getText().toString(),textViewBirthday.getText().toString(),uri,false);
+                Intent intent = new Intent(getApplicationContext(), ContactsFragment.class);
                 intent.putExtra("New_Contact",contacto);
                 setResult(Activity.RESULT_OK,intent);
                 finish();

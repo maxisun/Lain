@@ -128,6 +128,4 @@ public class AddContactActivity extends AppCompatActivity {
         }
     }
 
-
-
 }

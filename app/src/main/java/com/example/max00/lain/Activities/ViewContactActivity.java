@@ -43,25 +43,25 @@ public class ViewContactActivity extends AppCompatActivity {
 
         name.setText(contacto.getNombre());
 
-        if(contacto.getApellido()==null && contacto.getApellido()==""){
+        if(contacto.getApellido()==null && contacto.getApellido().equals("")){
             lastname.setText(missing);
         }else {
             lastname.setText(contacto.getApellido());
         }
 
-        if(contacto.getEmail()==null && contacto.getEmail()==""){
+        if(contacto.getEmail()==null && contacto.getEmail().equals("")){
             email.setText(missing);
         }else {
             email.setText(contacto.getEmail());
         }
 
-        if(contacto.getPhone()==null && contacto.getPhone()==""){
+        if(contacto.getPhone()==null && contacto.getPhone().equals("")){
             phone.setText(missing);
         }else {
             phone.setText(contacto.getPhone());
         }
 
-        if(contacto.getDate()==null && contacto.getDate()==""){
+        if(contacto.getDate()==null && contacto.getDate().equals("")){
             birthday.setText(missing);
         }else {
             birthday.setText(contacto.getDate());
@@ -72,6 +72,5 @@ public class ViewContactActivity extends AppCompatActivity {
         }else {
             photo.setImageURI(contacto.getUri());
         }
-
     }
 }

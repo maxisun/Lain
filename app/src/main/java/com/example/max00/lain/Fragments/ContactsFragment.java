@@ -1,5 +1,6 @@
 package com.example.max00.lain.Fragments;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +49,9 @@ public class ContactsFragment extends Fragment {
     private RecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private View v;
+    private SearchView searchView;
     List<Contacto> list = new ArrayList<>();
+    List<Contacto> backup = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
 
     public ContactsFragment() {
@@ -88,6 +92,7 @@ public class ContactsFragment extends Fragment {
                 Contacto getcontacto =data.getParcelableExtra("New_Contact");
                 Contacto new_contact = new Contacto(getcontacto.getNombre(),getcontacto.getApellido(),getcontacto.getEmail(),getcontacto.getPhone(),getcontacto.getDate(),getcontacto.getUri(),getcontacto.getCheck());
                 list.add(new_contact);
+                backup.add(new_contact);
             }
         }
         adapter.notifyDataSetChanged();
@@ -106,24 +111,95 @@ public class ContactsFragment extends Fragment {
         adapter = new RecyclerViewAdapter(getContext(), (ArrayList<Contacto>) getContactos());
         recyclerView.setAdapter(adapter);
 
-        /*RecyclerView recyclerView = v.findViewById(R.id.recyclerView_contacts);
-        recyclerView.setAdapter(new RecyclerViewAdapter(mParam1));
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));*/
 
-        /*GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
-        RecyclerView.LayoutManager layoutManager= gridLayoutManager;
-        recyclerView.setLayoutManager(layoutManager);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter((ArrayList<Contacto>) getContactos());
-        recyclerView.setAdapter(adapter);*/
+        searchView = getActivity().findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                list.clear();
+                query.toLowerCase();
+                for(int i=0; i < backup.size(); i++){
+                    if(backup.get(i).getNombre().toLowerCase().contains(query) || backup.get(i).getPhone().contains(query) ){
+                        list.add(backup.get(i));
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                list.clear();
+                if(newText.length()==0) {
+                    list.addAll(backup);
+                    adapter.notifyDataSetChanged();
+                }else {
+                    newText.toLowerCase();
+                    for(int i=0; i < backup.size(); i++){
+                        if(backup.get(i).getNombre().toLowerCase().contains(newText) || backup.get(i).getPhone().contains(newText)){
+                            list.add(backup.get(i));
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                    return true;
+                }
+                return true;
+            }
+        });
         return v;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.ECLAIR_0_1)
-    private List<Contacto> getContactos(){
+    /*private List<Contacto> getContactos(){
+        //Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null,null,null, ContactsContract.Contacts.DISPLAY_NAME+"ASC");
         Cursor cursor = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
         cursor.moveToFirst();
         while(cursor.moveToNext()){
             list.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)),R.drawable.holi));
+        }
+        cursor.close();
+        return list;
+    }*/
+
+    private List<Contacto> getContactos(){
+        String name = "";
+        String apellido = "";
+        String email = "";
+        String telefono = "";
+        String fecha = "";
+        String imagen = "";
+        Boolean bool = false;
+        Uri uri = uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getResources().getResourcePackageName(R.drawable.judge) + '/' + getResources().getResourceTypeName(R.drawable.judge) + '/' + getResources().getResourceEntryName(R.drawable.judge) );
+
+        //uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getResources().getResourcePackageName(R.drawable.judge) + '/' + getResources().getResourceTypeName(R.drawable.judge) + '/' + getResources().getResourceEntryName(R.drawable.judge) );
+        //Cursor cursor= getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,null,null,ContactsContract.Contacts.DISPLAY_NAME+" ASC");
+        Cursor cursor = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null,ContactsContract.Contacts.DISPLAY_NAME+" ASC");
+        cursor.moveToFirst();
+        while(cursor.moveToNext()){
+            //list.add(new Contacto(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)),"",cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID)),"","",R.drawable.holi));
+            name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            telefono = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            imagen = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+            email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID));
+
+            if(name==null && name.equals("")){
+                name = "Unavailable";
+            }
+
+            if(telefono==null && telefono.equals("")){
+                telefono = "Unavailable";
+            }
+
+            if(email == null && email.equals("")){
+                email = "Unavailable";
+            }
+
+            if(imagen!=null){
+                list.add(new Contacto(name,apellido,email,telefono,fecha,Uri.parse(imagen),bool));
+                backup.add(new Contacto(name,apellido,email,telefono,fecha,Uri.parse(imagen),bool));
+            }else {
+                list.add(new Contacto(name,apellido,email,telefono,fecha,uri,bool));
+                backup.add(new Contacto(name,apellido,email,telefono,fecha,uri,bool));
+            }
         }
         cursor.close();
         return list;

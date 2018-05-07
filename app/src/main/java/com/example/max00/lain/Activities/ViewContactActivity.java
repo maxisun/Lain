@@ -3,20 +3,35 @@ package com.example.max00.lain.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.R;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+
+import static android.R.layout.simple_spinner_item;
 
 public class ViewContactActivity extends AppCompatActivity {
 
@@ -33,6 +48,8 @@ public class ViewContactActivity extends AppCompatActivity {
     private ImageButton edit;
     private String missing = "missing";
     private Uri uri;
+    private Spinner spinner;
+    private ArrayList<String> telefonos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +65,29 @@ public class ViewContactActivity extends AppCompatActivity {
         calls = findViewById(R.id.call_IB);
         share = findViewById(R.id.share_IB);
         edit = findViewById(R.id.editContact);
+        //spinner = findViewById(R.id.SP_phones);
 
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         contacto = (Contacto) bundle.getParcelable("ContactInformation");
+
+        //telefonos.add(contacto.getPhone());
+
+        /*ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,simple_spinner_item,telefonos);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setSelection(0);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });*/
 
         name.setText(contacto.getNombre());
 
@@ -80,7 +116,7 @@ public class ViewContactActivity extends AppCompatActivity {
         }
 
         if (contacto.getUri() == null) {
-            photo.setImageResource(R.drawable.judge);
+            photo.setImageResource(R.drawable.perfil);
         } else {
             photo.setImageURI(contacto.getUri());
             uri = contacto.getUri();
@@ -96,7 +132,14 @@ public class ViewContactActivity extends AppCompatActivity {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                share();
+                share(v);
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editarContacto();
             }
         });
 
@@ -123,16 +166,52 @@ public class ViewContactActivity extends AppCompatActivity {
         }
     }
 
-    public void share(){
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_STREAM,uri);
-        intent.putExtra(Intent.EXTRA_TEXT,"Name: "+name.getText().toString() + "\nLast Name: "+lastname.getText().toString() +
-        "\nEmail: "+email.getText().toString() + "\nPhone: "+phone.getText().toString() + "\nBirthday: "+birthday.getText().toString());
-        Intent chooser = Intent.createChooser(intent,"Share with:");
-        if(intent.resolveActivity(getPackageManager()) != null){
-            startActivity(chooser);
+    //se crea el intent y se usa la imagen del bitmap para poder compartir
+    public void share(View view) {
+        Bitmap bitmap;
+        bitmap = getBitmapFromView(photo);
+
+        try {
+            File file = new File(this.getExternalCacheDir(), "Contact_Photo.png");
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            file.setReadable(true, false);
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            intent.putExtra(Intent.EXTRA_TEXT,"Name: "+name.getText().toString() + "\nLast Name: "+lastname.getText().toString() + "\nEmail: "+email.getText().toString() + "\nPhone: "+phone.getText().toString() + "\nBirthday: "+birthday.getText().toString());
+            intent.setType("*/*");
+            startActivity(Intent.createChooser(intent, "Share with:"));
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),"Error: "+e,Toast.LENGTH_LONG).show();
         }
+    }
+
+    //Crea una imagen y se pone en un canvas para que pueda ser soportada para ser compuesta a travez de un bitmap
+    public Bitmap getBitmapFromView(View view) {
+        Bitmap Result = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas One = new Canvas(Result);
+        Drawable Background = view.getBackground();
+
+        if (Background != null) {
+            Background.draw(One);
+        }
+        else {
+            One.drawColor(Color.WHITE);
+        }
+        view.draw(One);
+        return Result;
+    }
+
+    public void editarContacto(){
+        Intent intent = new Intent(getApplicationContext(),EditContactActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("EditContact",contacto);
+        intent.putExtras(bundle);
+        //intent.putExtra(Intent.EXTRA_TEXT, pos);
+        ViewContactActivity.this.startActivity(intent);
     }
 
 }

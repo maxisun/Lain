@@ -1,7 +1,7 @@
 package com.example.max00.lain.Fragments;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,7 +21,6 @@ import com.example.max00.lain.Adapters.RecyclerViewAdapter;
 import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +83,7 @@ public class ContactsFragment extends Fragment {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -98,7 +98,7 @@ public class ContactsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.ECLAIR_0_1)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -148,7 +148,7 @@ public class ContactsFragment extends Fragment {
         return v;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.ECLAIR_0_1)
+    //@RequiresApi(api = Build.VERSION_CODES.ECLAIR_0_1)
     /*private List<Contacto> getContactos(){
         //Cursor cursor = getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null,null,null, ContactsContract.Contacts.DISPLAY_NAME+"ASC");
         Cursor cursor = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
@@ -159,7 +159,7 @@ public class ContactsFragment extends Fragment {
         cursor.close();
         return list;
     }*/
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private List<Contacto> getContactos(){
         String name = "";
         String apellido = "";
@@ -168,7 +168,7 @@ public class ContactsFragment extends Fragment {
         String fecha = "";
         String imagen = "";
         Boolean bool = false;
-        Uri uri = uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getResources().getResourcePackageName(R.drawable.judge) + '/' + getResources().getResourceTypeName(R.drawable.judge) + '/' + getResources().getResourceEntryName(R.drawable.judge) );
+        Uri uri = uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getResources().getResourcePackageName(R.drawable.perfil) + '/' + getResources().getResourceTypeName(R.drawable.perfil) + '/' + getResources().getResourceEntryName(R.drawable.perfil) );
 
         //uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getResources().getResourcePackageName(R.drawable.judge) + '/' + getResources().getResourceTypeName(R.drawable.judge) + '/' + getResources().getResourceEntryName(R.drawable.judge) );
         //Cursor cursor= getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,null,null,ContactsContract.Contacts.DISPLAY_NAME+" ASC");

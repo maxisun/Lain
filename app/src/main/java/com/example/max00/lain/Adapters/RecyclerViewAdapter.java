@@ -58,7 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ContactsViewHolder holder, final int position) {
 
         final Contacto contacto = contactos.get(position);
 
@@ -72,6 +72,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(v.getContext(), ViewContactActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("ContactInformation",contacto);
+                intent.putExtra(Intent.EXTRA_TEXT,String.valueOf(position));
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }
@@ -83,6 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(v.getContext(), ViewContactActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("ContactInformation",contacto);
+                intent.putExtra(Intent.EXTRA_TEXT,String.valueOf(position));
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

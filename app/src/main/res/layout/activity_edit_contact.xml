@@ -53,6 +53,7 @@
             android:layout_marginLeft="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPersonName"
             android:hint="Max"/>
     </LinearLayout>
 
@@ -73,6 +74,7 @@
             android:layout_marginLeft="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPersonName"
             android:hint="Espinal"/>
     </LinearLayout>
 
@@ -93,6 +95,7 @@
             android:layout_marginLeft="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textWebEmailAddress"
             android:hint="maxisun@gmail.com"/>
     </LinearLayout>
 
@@ -113,6 +116,7 @@
             android:layout_marginLeft="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="phone"
             android:hint="22577777"/>
     </LinearLayout>
 

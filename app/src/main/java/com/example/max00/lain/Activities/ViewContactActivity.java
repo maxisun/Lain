@@ -36,7 +36,7 @@ import static android.R.layout.simple_spinner_item;
 public class ViewContactActivity extends AppCompatActivity {
 
     private static final int REQUEST_CALL = 1;
-    private Contacto contacto;
+    public Contacto contacto;
     private ImageView photo;
     private TextView name;
     private TextView lastname;
@@ -50,6 +50,7 @@ public class ViewContactActivity extends AppCompatActivity {
     private Uri uri;
     private Spinner spinner;
     private ArrayList<String> telefonos;
+    protected String position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class ViewContactActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         contacto = (Contacto) bundle.getParcelable("ContactInformation");
-
+        position = intent.getStringExtra(Intent.EXTRA_TEXT);
         //telefonos.add(contacto.getPhone());
 
         /*ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,simple_spinner_item,telefonos);
@@ -210,7 +211,7 @@ public class ViewContactActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putParcelable("EditContact",contacto);
         intent.putExtras(bundle);
-        //intent.putExtra(Intent.EXTRA_TEXT, pos);
+        intent.putExtra(Intent.EXTRA_TEXT, position);
         ViewContactActivity.this.startActivity(intent);
     }
 

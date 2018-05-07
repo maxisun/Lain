@@ -27,6 +27,7 @@ import java.util.List;
 import javax.xml.transform.Result;
 
 import static android.app.Activity.RESULT_OK;
+import static java.lang.Integer.parseInt;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +49,8 @@ public class ContactsFragment extends Fragment {
     private RecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private View v;
+    private Contacto editcontact;
+    private String position;
     private SearchView searchView;
     List<Contacto> list = new ArrayList<>();
     List<Contacto> backup = new ArrayList<>();
@@ -216,6 +219,26 @@ public class ContactsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        editcontact = null;
+        position = null;
+
+        Intent confirmation = getActivity().getIntent();
+        if(confirmation.getStringExtra(Intent.EXTRA_TEXT) != null){
+            Intent intent = getActivity().getIntent();
+            Bundle bundle = intent.getExtras();
+            editcontact = bundle.getParcelable("EditContact");
+            position = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (backup.get(parseInt(position)) != editcontact) {
+                list.set(parseInt(position), editcontact);
+                backup.set(parseInt(position), editcontact);
+            }
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**

@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_CODE_ASK_PERMISSION = 2018;
     int access;
+    private Contacto editcontact;
+    private String position;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPagerAdapter viewPagerAdapter;
     private ContactsFragment contactsFragment;
@@ -110,6 +112,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        Intent intent = this.getIntent();
+        if(intent.getStringExtra(Intent.EXTRA_TEXT) != null){
+            Bundle bundle = intent.getExtras();
+            editcontact = bundle.getParcelable("EditContact");
+            position = intent.getStringExtra(Intent.EXTRA_TEXT);
+            super.onResume();
+        }
+        else{
+            super.onResume();
+        }
+    }
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {

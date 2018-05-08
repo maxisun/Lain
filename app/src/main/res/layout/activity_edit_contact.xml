@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="8dp"
-    tools:context="com.example.max00.lain.Activities.EditContactActivity">
+    tools:context=".Activities.EditContactActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

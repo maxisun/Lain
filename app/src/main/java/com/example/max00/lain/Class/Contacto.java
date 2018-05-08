@@ -78,7 +78,7 @@ public class Contacto implements Parcelable {
         this.uri = uri;
     }
 
-    public Boolean getCheck() {
+    public Boolean isCheck() {
         return check;
     }
 

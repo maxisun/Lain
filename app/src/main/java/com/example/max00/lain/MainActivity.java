@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -28,9 +29,13 @@ import com.example.max00.lain.Fragments.FavouritesFragment;
 import com.example.max00.lain.Adapters.ViewPagerAdapter;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    static final String LIST = "Lista";
+    static final String BACKUP = "Backup";
 
     static final int REQUEST_CODE_ASK_PERMISSION = 2018;
     int access;
@@ -124,6 +129,27 @@ public class MainActivity extends AppCompatActivity {
         else{
             super.onResume();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        ContactsFragment contactsFragment = new ContactsFragment();
+        List<Contacto> list =  contactsFragment.getList();
+        List<Contacto> backup = contactsFragment.getBackup();
+
+        outState.putParcelableArrayList(LIST, (ArrayList<? extends Parcelable>) list);
+        outState.putParcelableArrayList(BACKUP, (ArrayList<? extends Parcelable>) backup);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        ContactsFragment contactsFragment = new ContactsFragment();
+        List<Contacto> list =  savedInstanceState.getParcelableArrayList(LIST);
+        List<Contacto> backup = savedInstanceState.getParcelableArrayList(BACKUP);
+        contactsFragment.setList(list);
+        contactsFragment.setBackup(backup);
     }
 
     /*@Override

@@ -7,9 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -23,8 +25,6 @@ import com.example.max00.lain.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.transform.Result;
 
 import static android.app.Activity.RESULT_OK;
 import static java.lang.Integer.parseInt;
@@ -54,6 +54,7 @@ public class ContactsFragment extends Fragment {
     private SearchView searchView;
     List<Contacto> list = new ArrayList<>();
     List<Contacto> backup = new ArrayList<>();
+    List<Contacto> favoritos = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
 
     public ContactsFragment() {
@@ -93,7 +94,7 @@ public class ContactsFragment extends Fragment {
         if(resultCode == RESULT_OK && requestCode == 3){
             if(data.hasExtra("New_Contact")==true){
                 Contacto getcontacto =data.getParcelableExtra("New_Contact");
-                Contacto new_contact = new Contacto(getcontacto.getNombre(),getcontacto.getApellido(),getcontacto.getEmail(),getcontacto.getPhone(),getcontacto.getDate(),getcontacto.getUri(),getcontacto.getCheck());
+                Contacto new_contact = new Contacto(getcontacto.getNombre(),getcontacto.getApellido(),getcontacto.getEmail(),getcontacto.getPhone(),getcontacto.getDate(),getcontacto.getUri(),getcontacto.isCheck());
                 list.add(new_contact);
                 backup.add(new_contact);
             }
@@ -111,7 +112,21 @@ public class ContactsFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         RecyclerView.LayoutManager layoutManager = gridLayoutManager;
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewAdapter(getContext(), (ArrayList<Contacto>) getContactos());
+        adapter = new RecyclerViewAdapter(getContext(), (ArrayList<Contacto>) getContactos()) {
+            @Override
+            public void checked(View view, int position) {
+               /* if(list.get(position).isCheck()){
+                    FavouritesFragment favouritesFragment = new FavouritesFragment();
+                    Bundle bundle = new Bundle();
+                    favoritos.add(list.get(position));
+                    bundle.putParcelableArrayList("favourites", (ArrayList<? extends Parcelable>) favoritos);
+                    favouritesFragment.setArguments(bundle);
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.favoritos,favouritesFragment);
+                    fragmentTransaction.commit();
+                }*/
+            }
+        };
         recyclerView.setAdapter(adapter);
 
 
@@ -254,5 +269,21 @@ public class ContactsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public List<Contacto> getList() {
+        return list;
+    }
+
+    public void setList(List<Contacto> list) {
+        this.list = list;
+    }
+
+    public List<Contacto> getBackup() {
+        return backup;
+    }
+
+    public void setBackup(List<Contacto> backup) {
+        this.backup = backup;
     }
 }

@@ -4,11 +4,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.max00.lain.Adapters.RecyclerViewAdapter;
+import com.example.max00.lain.Class.Contacto;
 import com.example.max00.lain.R;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +35,13 @@ public class FavouritesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private RecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private View v;
+    Iterator iterator;
+    Bundle bundle;
+    List<Contacto> listfavorites = new ArrayList<>();
+    List<Contacto> backupfavorites = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
 
     public FavouritesFragment() {
@@ -64,8 +78,40 @@ public class FavouritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourites, container, false);
+        v = inflater.inflate(R.layout.fragment_favourites,container,false);
+        recyclerView = v.findViewById(R.id.recyclerView_favourites);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
+        RecyclerView.LayoutManager layoutManager = gridLayoutManager;
+        recyclerView.setLayoutManager(layoutManager);
+
+        bundle = getArguments();
+        adapter = new RecyclerViewAdapter(getContext(),listfavorites) {
+            @Override
+            public void checked(View view, int position) {
+
+            }
+        };
+        if(bundle != null){
+            int contador = 0;
+            backupfavorites = bundle.getParcelable("favourites");
+            iterator = backupfavorites.listIterator();
+            while (iterator.hasNext()){
+                Contacto contacto = (Contacto) iterator.next();
+                listfavorites.add(contador,contacto);
+                for(int i = 0;i < contador;i++){
+                    if(listfavorites.get(i)==listfavorites.get(contador)) {
+                        listfavorites.remove(i);
+                        listfavorites.remove(i);
+                        break;
+                    }
+                }
+                adapter.notifyItemInserted(contador);
+                adapter.notifyItemRangeChanged(contador,listfavorites.size());
+                contador++;
+            }
+        }
+        recyclerView.setAdapter(adapter);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

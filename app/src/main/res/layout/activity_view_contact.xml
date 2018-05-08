@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".Activities.ViewContactActivity">
 
+
     <ImageView
         android:id="@+id/foto_IV"
         android:layout_gravity="center"

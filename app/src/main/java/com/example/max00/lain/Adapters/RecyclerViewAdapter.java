@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +21,7 @@ import com.example.max00.lain.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ContactsViewHolder> {
+public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ContactsViewHolder> {
 
     private List<Contacto> contactos;
     private Context context;
@@ -30,12 +32,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CardView cardView;
         TextView name;
         ImageView img;
+        CheckBox checkBox;
 
         public ContactsViewHolder(View itemview){
             super(itemview);
             cardView = itemview.findViewById(R.id.card_view);
             name = itemview.findViewById(R.id.TV_name);
             img = itemview.findViewById(R.id.imagen);
+            checkBox = itemview.findViewById(R.id.checkboxstate);
         }
     }
 
@@ -43,6 +47,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.contactos = lolis;
         this.context = context;
     }
+
+    public abstract void checked(View view,int position);
 
     @NonNull
     @Override
@@ -87,6 +93,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra(Intent.EXTRA_TEXT,String.valueOf(position));
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+            }
+        });
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                contactos.get(position).setCheck(isChecked);
+                checked(buttonView,position);
             }
         });
     }
